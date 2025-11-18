@@ -1,0 +1,2 @@
+fastapi[all]~=0.121.2
+redis~=7.0.1

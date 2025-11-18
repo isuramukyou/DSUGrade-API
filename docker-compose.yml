@@ -1,0 +1,27 @@
+name: "dsugrade"
+
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    entrypoint: [ "/scripts/run.sh" ]
+    ports:
+      - "127.0.0.1:${UVICORN_PORT}:${UVICORN_PORT}"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    env_file: .env
+    command: ["redis-server", "--requirepass", "$REDIS_PASSWORD"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  redis-data:
