@@ -6,3 +6,4 @@ class User(BaseModel):
     name: str
     course: int
     faculty: str
+    nbook: int
